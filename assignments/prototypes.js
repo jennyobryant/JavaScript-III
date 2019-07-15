@@ -7,7 +7,7 @@
   
   Each constructor function has unique properties and methods that are defined in their block comments below:
 */
-  
+console.log("PROTOTYPES");
 /*
   === GameObject ===
   * createdAt
@@ -16,12 +16,44 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
+function GameObject (attributes) {
+  this.createdAt = attributes.createdAt; 
+  this.name = attributes.name;
+  this.dimensions = attributes.dimensions; 
+  }; 
+
+  GameObject.prototype.destroy = function destroy (){
+    return `${this.name} was removed from the game.`;
+  }; 
+  
+/* let o = new GameObject({
+  createdAt: new Date(),
+  name: 'Bruce',
+  dimensions: {
+    length: 2,
+    width: 1,
+    height: 1,
+}}); 
+console.log(o.destroy()); 
+*/
+
+
 /*
   === CharacterStats ===
   * healthPoints
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
+function CharacterStats(attributes){ 
+  GameObject.call(this, attributes);
+  this.healthPoints = attributes.healthPoints;
+}
+
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
+CharacterStats.prototype.takeDamage = function takeDamage(){
+  return `${this.name} took damage.`;
+}; 
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -33,6 +65,19 @@
   * should inherit takeDamage() from CharacterStats
 */
  
+function Humanoid(attributes){
+  CharacterStats.call(this, attributes);
+  this.team = attributes.team;
+  this.weapons = attributes.weapons;
+  this.language = attributes.language;
+}; 
+
+Humanoid.prototype = object.create(CharacterStats.prototype); 
+
+Humanoid.prototype.greet = function greet(){
+  return `${this.name} offers a greeting in ${this.language}.`; 
+}; 
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
